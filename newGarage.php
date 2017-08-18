@@ -19,21 +19,45 @@ $cars = [];
 
 //garage
 $garage = [
-			'Kharkiv' => ['metal' => [['grey', 1], ['yellow', 2], ['black', 3]],
-				            'bricks' => [['grey', 1], ['yellow', 2], ['black', 3]]
-			],
-			'Kiev' =>  ['metal' => [['grey', 1], ['yellow', 2], ['black', 3]],
-				          'bricks' => [['grey', 1], ['yellow', 2], ['black', 3]]
-			],
-			'Poltava' => ['metal' => [['grey', 1], ['yellow', 2], ['black', 3]],
-				            'bricks' => [['grey', 3], ['yellow', 2], ['black', 1]]
-			]
-		];
+      'Kharkiv' => ['metal' => [
+                    ['color' => 'grey', 'parking' => 6, 'width' => 7500, 'height' => 2500, 'length' => 15000 ],
+                    ['color' => 'yellow', 'parking' => 4, 'width' => 10500, 'height' => 2500, 'length' => 13000 ],
+                    ['color' => 'black', 'parking' => 3, 'width' => 7500, 'height' => 2500, 'length' => 10000 ]
+                   ],
+                 'bricks' => [
+                    ['color' => 'grey', 'parking' => 6, 'width' => 7500, 'height' => 2500, 'length' => 15000 ],
+                    ['color' => 'yellow', 'parking' => 4, 'width' => 10500, 'height' => 2500, 'length' => 13000 ],
+                    ['color' => 'black', 'parking' => 3, 'width' => 7500, 'height' => 2500, 'length' => 10000 ]
+                   ]
+      ],
+      'Kiev' =>  ['metal' => [
+                    ['color' => 'grey', 'parking' => 6, 'width' => 7500, 'height' => 2500, 'length' => 15000 ],
+                    ['color' => 'yellow', 'parking' => 4, 'width' => 10500, 'height' => 2500, 'length' => 13000 ],
+                    ['color' => 'black', 'parking' => 3, 'width' => 7500, 'height' => 2500, 'length' => 10000 ]
+                   ],
+                'bricks' => [
+                    ['color' => 'grey', 'parking' => 6, 'width' => 7500, 'height' => 2500, 'length' => 15000 ],
+                    ['color' => 'yellow', 'parking' => 4, 'width' => 10500, 'height' => 2500, 'length' => 13000 ],
+                    ['color' => 'black', 'parking' => 3, 'width' => 7500, 'height' => 2500, 'length' => 10000 ]
+                   ]
+      ],
+      'Poltava' => ['metal' => [
+                    ['color' => 'grey', 'parking' => 6, 'width' => 7500, 'height' => 2500, 'length' => 15000 ],
+                    ['color' => 'yellow', 'parking' => 4, 'width' => 10500, 'height' => 2500, 'length' => 13000 ],
+                    ['color' => 'black', 'parking' => 3, 'width' => 7500, 'height' => 2500, 'length' => 10000 ]
+                   ],
+                 'bricks' => [
+                    ['color' => 'grey', 'parking' => 6, 'width' => 7500, 'height' => 2500, 'length' => 15000 ],
+                    ['color' => 'yellow', 'parking' => 4, 'width' => 10500, 'height' => 2500, 'length' => 13000 ],
+                    ['color' => 'black', 'parking' => 3, 'width' => 7500, 'height' => 2500, 'length' => 10000 ]
+                   ]
+      ]
+    ];
 
 function owner($users){
   $gender = array_rand(array_flip($users['Gender']));
   if ($gender == 'mr') {
-	   $names = array_rand(array_flip($users['Names']['males']));
+     $names = array_rand(array_flip($users['Names']['males']));
    } else $names = array_rand(array_flip($users['Names']['females']));
    $surnames = array_rand(array_flip($users['Surnames']));
 
@@ -42,20 +66,39 @@ function owner($users){
 
 
 function randGarage($array) {
-			$arr = [];
-			$city = array_rand($array); //city
-			$arr[] =$city;
-			$build = array_rand($array[$city]);
-			$arr[] = $build;
-			$rand_build = array_rand($array[$city][$build]);//color
-			$arr[] = $array[$city][$build][$rand_build];
-			return $arr;
-
+  $arr = [];
+  $city = array_rand($array); //city
+  $arr[] =$city;
+  $build = array_rand($array[$city]);
+  $arr[] = $build;
+  $rand_build = array_rand($array[$city][$build]);//color
+  $arr[] = $array[$city][$build][$rand_build];
+  return $arr;
 };
 
 function garageText($array) {
-	$text = "Your garage in " . $array[0] . " consist of " . $array[1] . ", " . "it's colour is " . $array[2][0] . ", " . "number of parking lots " . $array[2][1];
-		return $text;
+  $characteristics = [];
+  $otherdescr = '';
+  foreach($array[2] as $key => $value) {
+    $characteristics[] = $key . " - " . $value;
+
+  }
+  if(isset($array[2]['width']) && isset($array[2]['height']) && isset($array[2]['length'])) {
+    $width = mmTometer($array[2]['width']);
+    $length = mmTometer($array[2]['length']);
+    $height = mmTometer($array[2]['height']);
+    $square = $width * $length;
+    $volume = $square * $height;
+    $otherdescr = "Square - " . $square . " square meters" . "\n" . "Volume - " . $volume . " cubic meters" . "\n";
+
+  }
+  $description = implode("\n", $characteristics);
+  $text = "Your garage in " . $array[0] . " consist of " . $array[1] . "\n" . "Other garage features: ". "\n" . $description . "\n" . $otherdescr;
+    return $text;
+}
+function mmTometer($int) {
+  $int = $int / 1000;
+  return $int;
 }
 
 function convertYear($num = false)
@@ -109,16 +152,21 @@ function input($users, $cars, $garage) {
 
   $count_garage = rand(1, 5);
 
-	echo owner($users).' You have ' . $count_garage . ' garages: '. PHP_EOL;
-	for ($i=1; $i <= $count_garage ; $i++) {
-		$rand_garage = randGarage($garage);
-		echo PHP_EOL.garageText($rand_garage).PHP_EOL;
-        $count_car = rand(1,$rand_garage[2][1]);
+  echo owner($users).' You have ' . $count_garage . ' garages: '. PHP_EOL;
+  for ($i=1; $i <= $count_garage ; $i++) {
+    $rand_garage = randGarage($garage);
+    echo PHP_EOL.garageText($rand_garage).PHP_EOL;
+      $parking_count = $rand_garage[2]['parking'];
+        $count_car = rand(1, $parking_count);
         echo 'In this garage you have next cars: '.PHP_EOL;
-		for ($j=1; $j <= $count_car; $j++){
-	    echo '#'.$j.' car: '.cars($cars).PHP_EOL;
-	}
-	   }
+    for ($j=1; $j <= $parking_count; $j++){
+      if ($j > $count_car) {
+        echo '#' . $j. ' no car at this place '.PHP_EOL;
+      } else {
+          echo '#'.$j.' car: '.cars($cars).PHP_EOL;
+      }
+    }
+  }
 }
 
 input($users, $cars, $garage);
