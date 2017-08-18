@@ -164,6 +164,7 @@ function input($users, $cars, $garage) {
         echo '#' . $j. ' no car at this place '.PHP_EOL;
       } else {
           echo '#'.$j.' car: '.cars($cars).PHP_EOL;
+          
       }
     }
   }
