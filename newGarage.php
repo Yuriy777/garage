@@ -53,7 +53,6 @@ $garage = [
                    ]
       ]
     ];
-
 function owner($users){
   $gender = array_rand(array_flip($users['Gender']));
   if ($gender == 'mr') {
@@ -80,7 +79,7 @@ function garageText($array) {
   $characteristics = [];
   $otherdescr = '';
   foreach($array[2] as $key => $value) {
-    $characteristics[] = $key . " - " . $value;
+    $characteristics[] = '<p>' . $key . " - " . $value . "</p>";
 
   }
   if(isset($array[2]['width']) && isset($array[2]['height']) && isset($array[2]['length'])) {
@@ -89,11 +88,11 @@ function garageText($array) {
     $height = mmTometer($array[2]['height']);
     $square = $width * $length;
     $volume = $square * $height;
-    $otherdescr = "Square - " . $square . " square meters" . "\n" . "Volume - " . $volume . " cubic meters" . "\n";
+    $otherdescr = "<p>Square - " . $square . " square meters</p><p>Volume - " . $volume . " cubic meters</p>";
 
   }
   $description = implode("\n", $characteristics);
-  $text = "Your garage in " . $array[0] . " consist of " . $array[1] . "\n" . "Other garage features: ". "\n" . $description . "\n" . $otherdescr;
+  $text = "<h4>Your garage in " . $array[0] . " consist of " . $array[1] . "</h4>" . "<h4>Other garage features: ". "</h4><p>" . $description . "</p><p>" . $otherdescr . "</p>";
     return $text;
 }
 function mmTometer($int) {
@@ -152,21 +151,20 @@ function input($users, $cars, $garage) {
 
   $count_garage = rand(1, 5);
 
-  echo owner($users).' You have ' . $count_garage . ' garages: '. PHP_EOL;
+  echo "<p>" . $users .' You have ' . $count_garage . ' garages: </p>';
   for ($i=1; $i <= $count_garage ; $i++) {
     $rand_garage = randGarage($garage);
-    echo PHP_EOL.garageText($rand_garage).PHP_EOL;
+    echo "<p>".garageText($rand_garage)."</p>";
       $parking_count = $rand_garage[2]['parking'];
         $count_car = rand(1, $parking_count);
-        echo 'In this garage you have next cars: '.PHP_EOL;
+        echo '<h4>In this garage you have next cars: </h4>';
     for ($j=1; $j <= $parking_count; $j++){
       if ($j > $count_car) {
-        echo '#' . $j. ' no car at this place '.PHP_EOL;
+        echo '<p>#' . $j. ' no car at this place '."</p>";
       } else {
-          echo '#'.$j.' car: '.cars($cars).PHP_EOL;
+          echo '<p>#'.$j.' car: '.cars($cars)."</p>";
       }
     }
   }
 }
 
-input($users, $cars, $garage);
